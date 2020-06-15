@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service package="org.api.spring.generate">
+    <entity name="Company" table-name="Company">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="coaName" type="String" primary="false" alias-dbname="COA_Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="Account" type="collection" alias="accounts">
+            <association name="OneToMany" optional="false" mappedBy="companyID" orphan-removal="true" cascade="all" fetch="eager"/>
+        </column>
+    </entity>
+    <entity name="Account" table-name="Account" unique-constraints-name="UC_Account" constraints-column-name="id,Code">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="code" type="String" primary="false" alias-dbname="Code"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="Account" type="class" alias="parent">
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Account_Parent_ID" unique="false" nullable="false" updatable="false"/>
+            <association name="ManyToOne" optional="false" cascade="all" fetch="eager"/>
+        </column>
+        <column name="currency" type="String" primary="false" alias-dbname="Currency"
+                generation-type="none">
+            <hint length="3" nullable="true"/>
+        </column>
+        <column name="internalType" type="String" primary="false" alias-dbname="Internal_Type"
+                generation-type="none">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="accountType" type="String" primary="false" alias-dbname="Account_Type"
+                generation-type="none">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="activeStatus" type="String" primary="false" alias-dbname="Active_Status"
+                generation-type="none">
+            <hint length="1" nullable="true"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="false" updatable="false"/>
+            <association name="ManyToOne" optional="false" cascade="all" fetch="eager"/>
+        </column>
+        <column name="note" type="String" primary="false" alias-dbname="Note"
+                generation-type="none">
+            <hint length="5000" nullable="true"/>
+        </column>
+        <column name="Account" type="collection" alias="children">
+            <association name="OneToMany" optional="false" mappedBy="parent" orphan-removal="true" cascade="all" fetch="eager"/>
+        </column>
+    </entity>
+</service>
