@@ -138,6 +138,10 @@ public class GeneratorEntity {
         sb.append("\n");
         sb.append("import lombok.EqualsAndHashCode;");
         sb.append("\n");
+        sb.append("import lombok.Getter;");
+        sb.append("\n");
+        sb.append("import lombok.Setter;");
+        sb.append("\n");
         sb.append("\n");
         sb.append("import javax.persistence.*;");
         sb.append("\n");
@@ -188,20 +192,20 @@ public class GeneratorEntity {
                         NodeList nHintList = nNodeCol.getChildNodes();
                         if (eElementCol.getAttribute("type").equalsIgnoreCase("class")) {
 
-                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("name")), "public"));
-                            sg.append("\n");
+//                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("name")), "public"));
+//                            sg.append("\n");
 
-                            sg.append(writeGetter(lop(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("name")), "public"));
-                            sg.append("\n");
+//                            sg.append(writeGetter(lop(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("name")), "public"));
+//                            sg.append("\n");
                         } else if (eElementCol.getAttribute("type").equalsIgnoreCase("collection")) {
 
-                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("alias")),
-                                    cap("List<" + eElementCol.getAttribute("name") + ">"), "public"));
+//                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("alias")),
+//                                    cap("List<" + eElementCol.getAttribute("name") + ">"), "public"));
 
                             sg.append("\n");
                             sg.append("    @JsonIgnore");
@@ -211,9 +215,9 @@ public class GeneratorEntity {
                                     cap("List<" + eElementCol.getAttribute("name") + ">"), "public"));
                         } else if (eElementCol.getAttribute("type").equalsIgnoreCase("HashSet")) {
 
-                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
-                                    cap(eElementCol.getAttribute("alias")),
-                                    cap("Set<" + eElementCol.getAttribute("name") + ">"), "public"));
+//                            sg.append(writeSetter(lop(eElementCol.getAttribute("alias")),
+//                                    cap(eElementCol.getAttribute("alias")),
+//                                    cap("Set<" + eElementCol.getAttribute("name") + ">"), "public"));
 
                             sg.append("\n");
                             sg.append("    @JsonIgnore");
@@ -223,13 +227,13 @@ public class GeneratorEntity {
                                     cap("Set<" + eElementCol.getAttribute("name") + ">"), "public"));
                         } else {
 
-                            sg.append(writeSetter(lop(eElementCol.getAttribute("name")),
-                                    cap(eElementCol.getAttribute("name")),
-                                    cap(eElementCol.getAttribute("type")), "public"));
+//                            sg.append(writeSetter(lop(eElementCol.getAttribute("name")),
+//                                    cap(eElementCol.getAttribute("name")),
+//                                    cap(eElementCol.getAttribute("type")), "public"));
 
-                            sg.append(writeGetter(lop(eElementCol.getAttribute("name")),
-                                    cap(eElementCol.getAttribute("name")),
-                                    cap(eElementCol.getAttribute("type")), "public"));
+//                            sg.append(writeGetter(lop(eElementCol.getAttribute("name")),
+//                                    cap(eElementCol.getAttribute("name")),
+//                                    cap(eElementCol.getAttribute("type")), "public"));
 
                         }
 
@@ -281,6 +285,10 @@ public class GeneratorEntity {
                                     sb.append("\n");
                                     sb.append("    @Id");
                                     sb.append("\n");
+                                    sb.append("    @Getter");
+                                    sb.append("\n");
+                                    sb.append("    @Setter");
+                                    sb.append("\n");
                                     sb.append("    @Column(name = \"" + eElementCol.getAttribute("alias-dbname") + "\")");
                                     sb.append("\n");
                                 }
@@ -289,6 +297,10 @@ public class GeneratorEntity {
                                     sb.append("public class " + eElement.getAttribute("name") + " { ");
                                     sb.append("\n");
                                     sb.append("    @Id");
+                                    sb.append("\n");
+                                    sb.append("    @Getter");
+                                    sb.append("\n");
+                                    sb.append("    @Setter");
                                     sb.append("\n");
                                     sb.append("    @SequenceGenerator(name = \"" + eElementCol.getAttribute("generator") + "\", " +
                                             "initialValue = " + eElementCol.getAttribute("initial-value") + ", " +
@@ -300,6 +312,10 @@ public class GeneratorEntity {
                                     sb.append("public class " + eElement.getAttribute("name") + " { ");
                                     sb.append("\n");
                                     sb.append("    @Id");
+                                    sb.append("\n");
+                                    sb.append("    @Getter");
+                                    sb.append("\n");
+                                    sb.append("    @Setter");
                                     sb.append("\n");
                                     sb.append("    @TableGenerator(name = \"" + eElementCol.getAttribute("generator") + "\", " +
                                             "initialValue = " + eElementCol.getAttribute("initial-value") + ", " +
@@ -367,20 +383,29 @@ public class GeneratorEntity {
                                                                 "cascade = CascadeType." + eElementHint.getAttribute("cascade").toUpperCase() + ", " +
                                                                 "fetch = FetchType." + eElementHint.getAttribute("fetch").toUpperCase() + ")").append("\n");
 
-                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)").append("\n");
+                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)");
+                                                        sb.append("\n");
+                                                        sb.append("    @Setter");
+                                                        sb.append("\n");
                                                     } else if (eElementHint.getAttribute("name").equalsIgnoreCase("ManyToMany")) {
 
                                                         sb.append("    @" + eElementHint.getAttribute("name") + "(mappedBy = \"" + eElementHint.getAttribute("mappedBy") + "\", " +
                                                                 "cascade = CascadeType." + eElementHint.getAttribute("cascade").toUpperCase() + ", " +
                                                                 "fetch = FetchType." + eElementHint.getAttribute("fetch").toUpperCase() + ")").append("\n");
-                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)").append("\n");
+                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)");
+                                                        sb.append("\n");
+                                                        sb.append("    @Setter");
+                                                        sb.append("\n");
                                                     } else {
 
                                                         sb.append("    @" + eElementHint.getAttribute("name") + "(optional = " + eElementHint.getAttribute("optional") + ", " +
                                                                 "mappedBy = \"" + eElementHint.getAttribute("mappedBy") + "\", " +
                                                                 "cascade = CascadeType." + eElementHint.getAttribute("cascade").toUpperCase() + ", " +
                                                                 "fetch = FetchType." + eElementHint.getAttribute("fetch").toUpperCase() + ")").append("\n");
-                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)").append("\n");
+                                                        sb.append("    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)");
+                                                        sb.append("\n");
+                                                        sb.append("    @Setter");
+                                                        sb.append("\n");
                                                     }
                                                 } else {
                                                     if (eElementHint.getAttribute("name").equalsIgnoreCase("OneToMany") ||
@@ -411,12 +436,21 @@ public class GeneratorEntity {
                                                     sb.append("    @Column(name = \"" + alias
                                                             + "\", columnDefinition  = \"" + eElementHint.getAttribute("column-definition") + "\")");
                                                     sb.append("\n");
+                                                    sb.append("    @Getter");
+                                                    sb.append("\n");
+                                                    sb.append("    @Setter");
+                                                    sb.append("\n");
                                                 }
                                                 else if(eElementHint.getAttribute("scale").length() > 0 ||
                                                         eElementHint.getAttribute("precision").length() > 0) {
                                                     sb.append("    @Column(name = \"" + alias
                                                             + "\", precision = " + eElementHint.getAttribute("precision")
                                                             + ", scale  = " + eElementHint.getAttribute("scale") + ")");
+
+                                                    sb.append("\n");
+                                                    sb.append("    @Getter");
+                                                    sb.append("\n");
+                                                    sb.append("    @Setter");
                                                     sb.append("\n");
                                                 }
                                                 else {
@@ -425,11 +459,19 @@ public class GeneratorEntity {
                                                             + "\", nullable = " + eElementHint.getAttribute("nullable")
                                                             + ", length = " + eElementHint.getAttribute("length") + ")");
                                                     sb.append("\n");
+                                                    sb.append("    @Getter");
+                                                    sb.append("\n");
+                                                    sb.append("    @Setter");
+                                                    sb.append("\n");
                                                 }
                                             }
                                             else {
 
                                                 sb.append("    @Column(name = \"" + alias + "\")");
+                                                sb.append("\n");
+                                                sb.append("    @Getter");
+                                                sb.append("\n");
+                                                sb.append("    @Setter");
                                                 sb.append("\n");
                                             }
                                         }
@@ -451,6 +493,10 @@ public class GeneratorEntity {
 
                                     sb.append("    @Column(name = \"" + alias + "\")");
                                     sb.append("\n");
+                                    sb.append("    @Getter");
+                                    sb.append("\n");
+                                    sb.append("    @Setter");
+                                    sb.append("\n");
                                 }
                             }
                             if (eElementCol.getAttribute("format").length() > 0) {
@@ -466,6 +512,10 @@ public class GeneratorEntity {
                         }
                         if (eElementCol.getAttribute("type").equalsIgnoreCase("class")) {
 
+                            sb.append("    @Getter");
+                            sb.append("\n");
+                            sb.append("    @Setter");
+                            sb.append("\n");
                             sb.append("    private " + eElementCol.getAttribute("name") + " " + eElementCol.getAttribute("alias") + ";");
                             sb.append("\n");
 

@@ -8,7 +8,7 @@ import sys.generator.GeneratorEntity;
 public class SpringParentChildApiGenerateApplication {
 
     public static void main(String[] args) {
-//        GeneratorEntity.readXML();
+        GeneratorEntity.readXML();
         SpringApplication.run(SpringParentChildApiGenerateApplication.class, args);
     }
 

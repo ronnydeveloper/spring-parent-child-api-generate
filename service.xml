@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <service package="org.api.spring.generate">
     <entity name="Company" table-name="Company">
-        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
         <column name="name" type="String" primary="false" alias-dbname="Name"
                 generation-type="none">
             <hint length="200" nullable="true"/>
@@ -11,11 +11,11 @@
             <hint length="200" nullable="true"/>
         </column>
         <column name="Account" type="collection" alias="accounts">
-            <association name="OneToMany" optional="false" mappedBy="companyID" orphan-removal="true" cascade="all" fetch="eager"/>
+            <association name="OneToMany" optional="false" mappedBy="companyID" orphan-removal="true" cascade="all" fetch="lazy"/>
         </column>
     </entity>
     <entity name="Account" table-name="Account" unique-constraints-name="UC_Account" constraints-column-name="id,Code">
-        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
         <column name="code" type="String" primary="false" alias-dbname="Code"
                 generation-type="none">
             <hint length="60" nullable="true"/>
@@ -25,8 +25,8 @@
             <hint length="200" nullable="true"/>
         </column>
         <column name="Account" type="class" alias="parent">
-            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Account_Parent_ID" unique="false" nullable="false" updatable="false"/>
-            <association name="ManyToOne" optional="false" cascade="all" fetch="eager"/>
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Account_Parent_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
         </column>
         <column name="currency" type="String" primary="false" alias-dbname="Currency"
                 generation-type="none">
@@ -40,20 +40,598 @@
                 generation-type="none">
             <hint length="20" nullable="true"/>
         </column>
-        <column name="activeStatus" type="String" primary="false" alias-dbname="Active_Status"
-                generation-type="none">
-            <hint length="1" nullable="true"/>
-        </column>
+        <column name="activeStatus" type="Boolean" alias-dbname="Active_Status"/>
         <column name="Company" type="class" alias="companyID">
-            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="false" updatable="false"/>
-            <association name="ManyToOne" optional="false" cascade="all" fetch="eager"/>
+            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
         </column>
         <column name="note" type="String" primary="false" alias-dbname="Note"
                 generation-type="none">
             <hint length="5000" nullable="true"/>
         </column>
-        <column name="Account" type="collection" alias="children">
-            <association name="OneToMany" optional="false" mappedBy="parent" orphan-removal="true" cascade="all" fetch="eager"/>
+        <column name="Account" type="HashSet" alias="children">
+            <association name="OneToMany" optional="false" mappedBy="parent" orphan-removal="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="User" table-name="User">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="Employee" table-name="Employee">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="nik" type="String" primary="false" alias-dbname="NIK"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="ItemCategory" table-name="Item_Category">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="Department" table-name="Department">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="code" type="String" primary="false" alias-dbname="Code"
+                generation-type="none">
+            <hint length="30" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="Department" type="class" alias="parent">
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Department_Parent_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="PaymentTerm" table-name="Payment_Term">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="paymentTermCode" type="String" primary="false" alias-dbname="Payment_Term_Code"
+                generation-type="none">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="jumlah" type="Integer" alias-dbname="Jumlah"/>
+        <column name="termType" type="String" primary="false" alias-dbname="Term_Type"
+                generation-type="none">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="calendarFlag" type="Boolean" alias-dbname="Calendar_Flag"/>
+    </entity>
+    <entity name="StaticData" table-name="Static_Data">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="dataCategory" type="String" primary="false" alias-dbname="Data_Category"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="code" type="String" primary="false" alias-dbname="Code"
+                generation-type="none">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="BankCash" table-name="Bank_Cash">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="accountCode" type="String" primary="false" alias-dbname="Account_Code"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="currency" type="String" primary="false" alias-dbname="Currency"
+                generation-type="none">
+            <hint length="3" nullable="true"/>
+        </column>
+        <column name="voucherFlag" type="Boolean" alias-dbname="Voucher_Flag"/>
+        <column name="pettyCashFlag" type="Boolean" alias-dbname="Petty_Cash_Flag"/>
+        <column name="journalType" type="String" primary="false" alias-dbname="Journal_Type"
+                generation-type="none">
+            <hint length="30" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="Fiscal" table-name="Fiscal">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="fiscalYear" type="String" primary="false" alias-dbname="Fiscal_Year"
+                generation-type="none">
+            <hint length="4" nullable="true"/>
+        </column>
+        <column name="startDate" type="Date" format="dd/MM/yyyy" alias-dbname="Start_Date"/>
+        <column name="endDate" type="Date" format="dd/MM/yyyy" alias-dbname="End_Date"/>
+        <column name="note" type="String" primary="false" alias-dbname="Note"
+                generation-type="none">
+            <hint length="200" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="FiscalYear" table-name="Fiscal_Year">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="fiscalYear" type="String" primary="false" alias-dbname="Fiscal_Year"
+                generation-type="none">
+            <hint length="4" nullable="true"/>
+        </column>
+        <column name="periode" type="String" primary="false" alias-dbname="Periode"
+                generation-type="none">
+            <hint length="6" nullable="true"/>
+        </column>
+        <column name="startDate" type="Date" format="dd/MM/yyyy" alias-dbname="Start_Date"/>
+        <column name="endDate" type="Date" format="dd/MM/yyyy" alias-dbname="End_Date"/>
+        <column name="status" type="String" primary="false" alias-dbname="Status"
+                generation-type="none">
+            <hint length="12" nullable="true"/>
+        </column>
+        <column name="Fiscal" type="class" alias="fiscalID">
+            <join-column name="Fiscal_ID" referencedColumnName="id" foreign-key-name="FK_Fiscal_Fiscal_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="Tax" table-name="Tax">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="taxCode" type="String" primary="false" alias-dbname="Tax_Code"
+                generation-type="none">
+            <hint length="30" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="Name"
+                generation-type="none">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="taxValue" type="BigDecimal" alias-dbname="Tax_Value">
+            <hint precision="32" scale="2"/>
+        </column>
+        <column name="calcType" type="String" primary="false" alias-dbname="Calc_Type"
+                generation-type="none">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="Company_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="defaultCurrency" type="String" primary="false" alias-dbname="Default_Currency"
+                generation-type="none">
+            <hint length="3" nullable="true"/>
+        </column>
+        <column name="accountCode" type="String" primary="false" alias-dbname="Account_Code"
+                generation-type="none">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="modulType" type="String" primary="false" alias-dbname="Modul_Type"
+                generation-type="none">
+            <hint length="12" nullable="true"/>
+        </column>
+        <column name="baseTaxFlag" type="Boolean" alias-dbname="Base_Tax_Flag"/>
+    </entity>
+    <entity name="Partner" table-name="Partner" unique-constraints-name="UC_Partner" constraints-column-name="id,NPWP_NO">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="name" type="String" primary="false" alias-dbname="NAME">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="title" type="String" primary="false" alias-dbname="TITLE">
+            <hint length="6" nullable="true"/>
+        </column>
+        <column name="Partner" type="class" alias="parent">
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Parent_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="type" type="String" alias-dbname="TYPE">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="isCompany" type="Boolean" alias-dbname="IS_COMPANY"/>
+        <column name="npwpNo" type="String" alias-dbname="NPWP_NO">
+            <hint length="30" nullable="true"/>
+        </column>
+        <column name="npwpAlamat" type="String" alias-dbname="NPWP_ALAMAT">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="address" type="String" alias-dbname="ADDRESS">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="street" type="String" alias-dbname="STREET">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="city" type="String" alias-dbname="CITY">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="province" type="String" alias-dbname="PROVINCE">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="country" type="String" alias-dbname="COUNTRY">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="zip" type="String" alias-dbname="ZIP">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="phone" type="String" alias-dbname="PHONE">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="mobile" type="String" alias-dbname="MOBILE">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="fax" type="String" alias-dbname="FAX">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="email" type="String" alias-dbname="EMAIL">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="activeStatus" type="Boolean" alias-dbname="ACTIVE_STATUS"/>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="COMPANY_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="partnerDesc" type="String" alias-dbname="PARTNER_DESC">
+            <hint length="5000" nullable="true"/>
+        </column>
+        <column name="accountRec" type="String" alias-dbname="ACCOUNT_REC">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="accountPay" type="String" alias-dbname="ACCOUNT_PAY">
+            <hint length="60" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="Project" table-name="Project" unique-constraints-name="UC_Project" constraints-column-name="id,NO_PROJECT">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="name" type="String" primary="false" alias-dbname="NAME">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="Partner" type="class" alias="partnerID">
+            <join-column name="PARTNER_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Partner_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="noProject" type="String" primary="false" alias-dbname="NO_PROJECT">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="noKontrak" type="String" primary="false" alias-dbname="NO_KONTRAK">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="dateStart" type="Date" format="dd/MM/yyyy" alias-dbname="DATE_START"/>
+        <column name="dateEnd" type="Date" format="dd/MM/yyyy" alias-dbname="DATE_END"/>
+        <column name="statusBA" type="String" primary="false" alias-dbname="STATUS_BA">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="tglKontrak" type="Date" format="dd/MM/yyyy" alias-dbname="TGL_KONTRAK"/>
+        <column name="tglPerjanjianFrom" type="Date" format="dd/MM/yyyy" alias-dbname="TGL_PERJANJIAN_FROM"/>
+        <column name="tglPerjanjianTo" type="Date" format="dd/MM/yyyy" alias-dbname="TGL_PERJANJIAN_TO"/>
+        <column name="projectStatus" type="String" primary="false" alias-dbname="PROJECT_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="Project" type="class" alias="parent">
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Project_Parent_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="COMPANY_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="Product" table-name="Product">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"/>
+        <column name="code" type="String" primary="false" alias-dbname="Code">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="name" type="String" primary="false" alias-dbname="NAME">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="Product" type="class" alias="parent">
+            <join-column name="Parent_ID" referencedColumnName="id" foreign-key-name="FK_Project_Parent_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="productCategory" type="Integer" alias-dbname="Product_Category"/>
+        <column name="productUOM" type="String" primary="false" alias-dbname="Product_UOM">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="activeStatus" type="Boolean" primary="false" alias-dbname="Active_Status"/>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="COMPANY_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="productDesc" type="String" primary="false" alias-dbname="Product_Desc">
+            <hint length="5000" nullable="true"/>
+        </column>
+        <column name="incomeAccount" type="String" primary="false" alias-dbname="Income_Account">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="expenseAccount" type="String" primary="false" alias-dbname="Expense_Account">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="localProductFlag" type="Boolean" alias-dbname="Local_Product_Flag"/>
+    </entity>
+    <entity name="PurchaseRequisition" table-name="Purchase_Requisition">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="prNumber" type="String" alias-dbname="PR_NUMBER">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="name" type="String" alias-dbname="NAME">
+            <hint length="500" nullable="true"/>
+        </column>
+        <column name="requestDate" type="Date" format="dd/MM/yyyy" alias-dbname="REQUEST_DATE"/>
+        <column name="scheduleDate" type="Date" format="dd/MM/yyyy" alias-dbname="SCHEDULE_DATE"/>
+        <column name="Employee" type="class" alias="requestId">
+            <join-column name="REQUEST_ID" referencedColumnName="id" foreign-key-name="FK_Employee_REQUEST_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="prStatus" type="String" alias-dbname="PR_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="PurchaseOrder" type="class" alias="poID">
+            <join-column name="PO_ID" referencedColumnName="id" foreign-key-name="FK_PurchaseOrder_PO_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="inp01NoDoc" type="String" alias-dbname="INP01_NODOC">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="inp01TglTerbit" type="Date" format="dd/MM/yyyy" alias-dbname="INP01_TGL_TERBIT"/>
+        <column name="inp01KadepProc" type="String" alias-dbname="INP01_KADEP_PROC">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="inp01Bod" type="String" alias-dbname="INP01_BOD">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="inp01Atasan" type="String" alias-dbname="INP01_ATASAN">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="COMPANY_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="createdUserId" type="String" alias-dbname="CREATED_USER_ID">
+            <hint length="50" nullable="true"/>
+        </column>
+        <column name="Department" type="class" alias="departmentID">
+            <join-column name="DEPARTMENT_ID" referencedColumnName="id" foreign-key-name="FK_Department_Department_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="currency" type="String" alias-dbname="CURRENCY">
+            <hint length="3" nullable="true"/>
+        </column>
+        <column name="poDibuatFlag" type="Boolean" alias-dbname="PO_DIBUAT_FLAG"/>
+        <column name="Project" type="class" alias="projectId">
+            <join-column name="PROJECT_ID" referencedColumnName="id" foreign-key-name="FK_Project_Project_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="amount" type="BigDecimal" alias-dbname="AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+    </entity>
+    <entity name="PurchaseRequisitionLine" table-name="Purchase_Requisition_Line">
+        <column name="lineId" type="Long" primary="true" alias-dbname="LINE_ID" generation-type="identity"></column>
+        <column name="PurchaseRequisition" type="class" alias="requisitionID">
+            <join-column name="REQUISITION_ID" referencedColumnName="id" foreign-key-name="FK_PurchaseRequisition_Requisition_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="requestDesc" type="String" alias-dbname="REQUEST_DESC">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="productId" type="Integer" alias-dbname="PRODUCT_ID"/>
+        <column name="productQty" type="Integer" alias-dbname="PRODUCT_QTY"/>
+        <column name="productUOM" type="String" alias-dbname="PRODUCT_UOM">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="priceUnit" type="BigDecimal" alias-dbname="PRICE_UNIT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="totalAmount" type="BigDecimal" alias-dbname="TOTAL_AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="invoicedFlag" type="Boolean" alias-dbname="INVOICED_FLAG"/>
+        <column name="lineStatus" type="String" alias-dbname="LINE_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="PurchaseOrder" table-name="Purchase_Order">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="poNumber" type="String" alias-dbname="PO_NUMBER">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="orderDate" type="Date" format="dd/MM/yyyy" alias-dbname="ORDER_DATE"/>
+        <column name="Project" type="class" alias="projectID">
+            <join-column name="PROJECT_ID" referencedColumnName="id" foreign-key-name="FK_Project_Project_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Partner" type="class" alias="partnerID">
+            <join-column name="PARTNER_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Partner_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="amount" type="BigDecimal" alias-dbname="AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="taxAmount" type="BigDecimal" alias-dbname="TAX_AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="totalAmount" type="BigDecimal" alias-dbname="TOTAL_AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="currency" type="String" alias-dbname="CURRENCY">
+            <hint length="3" nullable="true"/>
+        </column>
+        <column name="poStatus" type="String" alias-dbname="PO_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="bidDate" type="Date" format="dd/MM/yyyy" alias-dbname="BID_DATE"/>
+        <column name="approvedDate" type="Date" format="dd/MM/yyyy" alias-dbname="APPROVED_DATE"/>
+        <column name="paymentTerm" type="String" alias-dbname="PAYMENT_TERM">
+            <hint length="12" nullable="true"/>
+        </column>
+        <column name="Department" type="class" alias="departmentID">
+            <join-column name="DEPARTMENT_ID" referencedColumnName="id" foreign-key-name="FK_Department_Department_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Company" type="class" alias="companyID">
+            <join-column name="COMPANY_ID" referencedColumnName="id" foreign-key-name="FK_Company_Company_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="termNote" type="String" alias-dbname="TERM_NOTE">
+            <hint length="5000" nullable="true"/>
+        </column>
+        <column name="note" type="String" alias-dbname="NOTE">
+            <hint length="5000" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="PurchaseOrderLine" table-name="Purchase_Order_Line">
+        <column name="lineId" type="Long" primary="true" alias-dbname="LINE_ID" generation-type="identity"></column>
+        <column name="PurchaseOrder" type="class" alias="poID">
+            <join-column name="PO_ID" referencedColumnName="id" foreign-key-name="FK_PurchaseOrder_PO_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="name" type="String" alias-dbname="NAME">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="productId" type="Integer" alias-dbname="PRODUCT_ID"/>
+        <column name="productQty" type="Integer" alias-dbname="PRODUCT_QTY"/>
+        <column name="productUOM" type="String" alias-dbname="PRODUCT_UOM">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="priceUnit" type="BigDecimal" alias-dbname="PRICE_UNIT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="amount" type="BigDecimal" alias-dbname="AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="jenisHitungPPN" type="String" alias-dbname="JENIS_HITUNG_PPN">
+            <hint length="12" nullable="true"/>
+        </column>
+        <column name="taxAmount" type="BigDecimal" alias-dbname="TAX_AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="amountDPP" type="BigDecimal" alias-dbname="AMOUNT_DPP">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="invoicedFlag" type="Boolean" alias-dbname="INVOICED_FLAG"/>
+        <column name="lineStatus" type="String" alias-dbname="LINE_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="totalAmount" type="BigDecimal" alias-dbname="TOTAL_AMOUNT">
+            <hint precision="32" scale="2"/>
+        </column>
+        <column name="taxCode" type="String" alias-dbname="TAX_CODE">
+            <hint length="20" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="PurchaseOrderDetail" table-name="Purchase_Order_Detail">
+        <column name="poDetailId" type="Long" primary="true" alias-dbname="PO_DETAIL_ID" generation-type="identity"></column>
+        <column name="PurchaseOrder" type="class" alias="poID">
+            <join-column name="PO_ID" referencedColumnName="id" foreign-key-name="FK_PurchaseOrder_PO_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="PurchaseRequisition" type="class" alias="requisitionID">
+            <join-column name="REQUISITION_ID" referencedColumnName="id" foreign-key-name="FK_PurchaseRequisition_Requisition_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="PurchaseContract" table-name="Purchase_Contract">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="contractNumber" type="String" alias-dbname="CONTRACT_NUMBER">
+            <hint length="100" nullable="true"/>
+        </column>
+        <column name="note" type="String" alias-dbname="NOTE">
+            <hint length="5000" nullable="true"/>
+        </column>
+        <column name="Partner" type="class" alias="vendorID">
+            <join-column name="VENDOR_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Vendor_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="startDate" type="Date" format="dd/MM/yyyy" alias-dbname="START_DATE"/>
+        <column name="endDate" type="Date" format="dd/MM/yyyy" alias-dbname="END_DATE"/>
+        <column name="Partner" type="class" alias="customerID">
+            <join-column name="CUSTOMER_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Customer_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Project" type="class" alias="projectID">
+            <join-column name="PROJECT_ID" referencedColumnName="id" foreign-key-name="FK_Project_Project_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="InvoiceReceived" table-name="Invoice_Received">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="Partner" type="class" alias="partnerID">
+            <join-column name="PARTNER_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Partner_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="invoiceDate" type="Date" format="dd/MM/yyyy" alias-dbname="INVOICE_DATE"/>
+        <column name="invoiceNumber" type="String" alias-dbname="INVOICE_NUMBER">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="amount" type="BigDecimal" alias-dbname="AMOUNT">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="amountTax" type="BigDecimal" alias-dbname="AMOUNT_TAX">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="amountTotal" type="BigDecimal" alias-dbname="AMOUNT_TOTAL">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="noFakturPajak" type="String" alias-dbname="NO_FAKTUR_PAJAK">
+            <hint length="60" nullable="true"/>
+        </column>
+        <column name="receiptDate" type="Date" format="dd/MM/yyyy" alias-dbname="RECEIPT_DATE"/>
+        <column name="receiptDateFin" type="Date" format="dd/MM/yyyy" alias-dbname="RECEIPT_DATE_FIN"/>
+        <column name="receiptStatus" type="String" alias-dbname="RECEIPT_STATUS">
+            <hint length="20" nullable="true"/>
+        </column>
+        <column name="note" type="String" alias-dbname="NOTE">
+            <hint length="5000" nullable="true"/>
+        </column>
+    </entity>
+    <entity name="Contract" table-name="Contract">
+        <column name="id" type="Long" primary="true" alias-dbname="id" generation-type="identity"></column>
+        <column name="contractNo" type="String" alias-dbname="CONTRACT_NO">
+            <hint length="80" nullable="true"/>
+        </column>
+        <column name="contractName" type="String" alias-dbname="CONTRACT_NAME">
+            <hint length="200" nullable="true"/>
+        </column>
+        <column name="periodeFrom" type="Date" format="dd/MM/yyyy" alias-dbname="PERIODE_FROM"/>
+        <column name="periodeTo" type="Date" format="dd/MM/yyyy" alias-dbname="PERIODE_TO"/>
+        <column name="Partner" type="class" alias="vendorID">
+            <join-column name="Vendor_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Vendor_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Partner" type="class" alias="partnerID">
+            <join-column name="PARTNER_ID" referencedColumnName="id" foreign-key-name="FK_Partner_Partner_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+        <column name="Project" type="class" alias="projectID">
+            <join-column name="Project_ID" referencedColumnName="id" foreign-key-name="FK_Project_Project_ID" unique="false" nullable="true" updatable="true"/>
+            <association name="ManyToOne" optional="true" cascade="all" fetch="lazy"/>
+        </column>
+    </entity>
+    <entity name="CurrencyRate" table-name="Currency_Rate">
+        <column name="currency" type="String" primary="true" alias-dbname="Currency" generation-type="identity">
+            <hint length="5" nullable="false"/>
+        </column>
+        <column name="date" type="Date" format="dd/MM/yyyy" alias-dbname="DATE"/>
+        <column name="companyRate" type="String" alias-dbname="COMPANY_RATE">
+            <hint length="10" nullable="true"/>
+        </column>
+        <column name="kursJual" type="BigDecimal" alias-dbname="KURS_JUAL">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="kursTengah" type="BigDecimal" alias-dbname="KURS_TENGAH">
+            <hint precision="38" scale="2"/>
+        </column>
+        <column name="kursBeli" type="BigDecimal" alias-dbname="KURS_BELI">
+            <hint precision="38" scale="2"/>
         </column>
     </entity>
 </service>

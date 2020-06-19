@@ -137,7 +137,7 @@ public class Account {
         this.note = note;
     }
 
-//    @JsonIgnore
+    @JsonIgnore
     public List<Account> getChildren() {
         return children;
     }

@@ -2,7 +2,9 @@ package core.api.inherit.springparentchildapigenerate.service.impl;
 
 import core.api.inherit.springparentchildapigenerate.dto.AccountDTO;
 import core.api.inherit.springparentchildapigenerate.entity.Account;
+import core.api.inherit.springparentchildapigenerate.entity.Company;
 import core.api.inherit.springparentchildapigenerate.repository.AccountRepo;
+import core.api.inherit.springparentchildapigenerate.repository.CompanyRepo;
 import core.api.inherit.springparentchildapigenerate.service.AccountService;
 import core.api.inherit.springparentchildapigenerate.util.enums.ResponseCode;
 import core.api.inherit.springparentchildapigenerate.util.response.ApiResponse;
